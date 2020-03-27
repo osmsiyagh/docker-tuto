@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Docker tutorial</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Open+Sans&display=swap");
+
+      html,
+      body {
+        font-family: "Open Sans", sans-serif;
+      }
+
+      .btn,
+      .form-control,
+      .list-group-item {
+        border-radius: 0;
+      }
+
+      .list-group-item {
+        width: 500px;
+      }
+
+      .delete-btn {
+        position: absolute;
+        right: 15px;
+        top: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container p-5">
+      <div class="m-2">
+        <form class="form-inline" onsubmit="return addUser();">
+          <div class="form-group">
+            <input
+              type="text"
+              class="form-control mb-2 mr-2"
+              id="name"
+              placeholder="username"
+            />
+          </div>
+          <button type="submit" class="btn btn-outline-primary mb-2">
+            Add new user
+          </button>
+        </form>
+      </div>
+      <div class="m-2 mt-4">
+        <h5>List of users</h5>
+        <hr />
+        <ul class="list-group" id="users"></ul>
+      </div>
+    </div>
+
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+      integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      users = [];
+
+      makeListItem = name => `<li class="list-group-item">
+        <span class="mr-3">${name}</span>
+        <button type="submit" class="btn btn-outline-danger mb-2 delete-btn" onclick="deleteUser(event)" id="${name}">
+          Delete
+          </button>
+      </li>`;
+
+      rerenderUsers = () =>
+        (document.getElementById("users").innerHTML = users
+          .map(makeListItem)
+          .join(""));
+
+      fetchUsers = () => {
+        // TODO: fetch users from database here
+      };
+
+      addUser = () => {
+        input = document.getElementById("name");
+        if (input.value) {
+          // TODO: add user to database here
+          users = [...users, input.value];
+          input.value = "";
+        }
+        rerenderUsers();
+        return false;
+      };
+
+      deleteUser = event => {
+        userToDelete = event.srcElement.id;
+        // TODO: delete user from database
+        users = users.filter(user => user != userToDelete);
+        rerenderUsers();
+      };
+
+      window.onload = () => {
+        fetchUsers();
+        rerenderUsers();
+      };
+    </script>
+  </body>
+</html>
