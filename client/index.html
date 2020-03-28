@@ -91,14 +91,30 @@
           .map(makeListItem)
           .join(""));
 
-      fetchUsers = () => {
-        // TODO: fetch users from database here
-      };
+      fetchUsers = () =>
+        fetch("http://localhost:8080/api/getUsers")
+          .then(res => res.json())
+          .then(data => {
+            users = data;
+            rerenderUsers();
+          })
+          .catch(e => console.log(e));
 
       addUser = () => {
         input = document.getElementById("name");
         if (input.value) {
-          // TODO: add user to database here
+          fetch("http://localhost:8080/api/addUser", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              email: input
+            })
+          })
+            .then(res => res.json())
+            .then(res => console.log(res))
+            .catch(e => console.log(e));
           users = [...users, input.value];
           input.value = "";
         }
@@ -108,7 +124,12 @@
 
       deleteUser = event => {
         userToDelete = event.srcElement.id;
-        // TODO: delete user from database
+        fetch(`http://localhost:8080/api/deleteUser/?email=${userToDelete}`, {
+          method: "DELETE"
+        })
+          .then(res => res.json())
+          .then(res => console.log(res))
+          .catch(e => console.log(e));
         users = users.filter(user => user != userToDelete);
         rerenderUsers();
       };
